@@ -1,6 +1,6 @@
 # Screen traceability
 
-All targets below are implementation assignments, not completion claims. Source: App.tsx and index.css; frames secondary. Verification requires automated checks plus actual Android rendering.
+Targets below map prototype behavior to native feature folders. All screens are wired, but a row is accepted only after its listed verification runs; physical Android checks remain pending. Source: web `App.tsx` and `index.css`; frames secondary. Main-output toggle/colour is tracked as backend blocked in `DEFECTS.md` until controller mapping is verified on a designated device.
 
 | Prototype screen / interaction | Native owner | Verification |
 |---|---|---|
@@ -11,6 +11,7 @@ All targets below are implementation assignments, not completion claims. Source:
 | Organisation sheet search/loading/error/empty/pending/select | features/organisations | Query tests; org switch cancellation |
 | Project sheet search/loading/error/empty/select | features/projects | Query tests; project switch cancellation |
 | Devices search/debounce/filter/refresh/scroll/status/skeleton/retry | features/devices | FlatList tests; real data; 10k-row performance |
+| Add device button, configuration pickers, manual verified IDs, confirmation | features/devices/AddDeviceScreen | Enrollment contract tests; hardware/network authenticated reads; authorized operator registration and reload |
 | Device details outputs/attributes/last heard | features/devices | Schema tests; live reads |
 | Main output toggle and colour picker | features/downlink | Designated-device mapping and rollback/uncertain tests |
 | Downlink module selection, value, pending/result | features/downlink | Duplicate/timeout tests; authorized real execution |

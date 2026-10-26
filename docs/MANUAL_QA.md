@@ -2,7 +2,7 @@
 
 Status: NOT PERFORMED. User will run Expo Go on phone over LAN. Automated tests cannot satisfy these checks.
 
-1. In mobile run npm ci then npx expo start --lan. Phone and PC must be on the same LAN; scan QR with matching Android Expo Go SDK.
+1. In `mobile/` run `npm ci` then `npm run start:lan`. Wait for `Metro: exp://<PC-LAN-IP>:8082` before scanning; the first cold-cache build can take about two minutes. Phone and PC must be on the same LAN/hotspot; scan QR with matching Android Expo Go SDK. On this Windows host the active connection is an unidentified/public hotspot, so an Administrator must first allow the narrow inbound rule: `New-NetFirewallRule -DisplayName "Ginjer Expo Metro 8082" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8082 -Profile Private,Public`. If scanning does not hand off, use Expo Go’s manual URL entry with the displayed `exp://` URL. Record phone model, Android version, Expo Go version, build revision, start/end times and pass/fail for every step.
 2. At 360x800 compare every screen/sheet to prototype; repeat 320x568 and 412x915. Test font scaling, TalkBack focus/labels, 48dp touch targets, keyboard on every field and sheet, rotation and reduced motion.
 3. Login: empty/invalid email, blank/wrong password, offline/slow/server failure; valid account persists after reload/kill/relaunch; token expiry returns to login once.
 4. Select organisations/projects rapidly; old responses must not overwrite new scope. Pending org disabled. Empty/loading/error/search/no-results/Retry shown honestly.
@@ -12,4 +12,4 @@ Status: NOT PERFORMED. User will run Expo Go on phone over LAN. Automated tests 
 8. Notifications: first snapshot yields no invented event; real new timestamp/value emits event; read state persists and navigates to correct device. Analytics uses only returned values.
 9. Polling: network inspector shows no polls after background/unfocus; foreground resumes; org/project switch cancels old requests. Measure startup via Android launch timing, screen interaction frame time, memory via adb dumpsys meminfo. Record actual device/build/result.
 10. Edit profile: validation, dirty discard including Android back, real save/reload; logout confirmation and cache/secret clear. Airplane mode, kill/relaunch, rapid double taps.
-11. Repeat entire matrix twice after fixes. Record evidence in docs/QA_RESULTS.md. For APK additionally install actual EAS preview APK and verify cold launch/maps/session. Neither export nor Expo Go is APK verification.
+11. Repeat the entire matrix twice after fixes. Record evidence in docs/QA_RESULTS.md. For APK, set `GOOGLE_MAPS_ANDROID_API_KEY` as an EAS environment secret restricted to `io.senra.ginjer` and the signing SHA-1, run `npx eas-cli@latest build --platform android --profile preview`, install the resulting APK, and verify cold launch, maps and session. Neither export nor Expo Go is APK verification.
