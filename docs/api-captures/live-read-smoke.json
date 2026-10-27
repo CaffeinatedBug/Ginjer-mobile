@@ -1,28 +1,111 @@
 [
   {
     "operation": "Sign In",
+    "case": "bad-password",
     "passed": true,
-    "http": 200
+    "http": 200,
+    "codes": [
+      "INTERNAL_SERVER_ERROR"
+    ],
+    "errorDetails": [
+      {
+        "messageIndicators": [
+          "invalid",
+          "password"
+        ],
+        "extensionKeys": [
+          "code",
+          "exception"
+        ],
+        "path": [
+          "signIn"
+        ]
+      }
+    ]
+  },
+  {
+    "operation": "Sign In",
+    "passed": true,
+    "http": 200,
+    "fieldTypes": {
+      "_id": "str",
+      "firstName": "str",
+      "lastName": "str",
+      "emailId": "str",
+      "token": "str",
+      "phoneNo": "dict",
+      "alternateNo": "dict",
+      "image": "dict",
+      "defaultAccount": "str",
+      "organisationId": "str"
+    }
+  },
+  {
+    "operation": "Org List",
+    "case": "invalid-token",
+    "passed": true,
+    "http": 200,
+    "codes": [
+      "UNAUTHENTICATED"
+    ],
+    "errorDetails": [
+      {
+        "messageIndicators": [
+          "invalid",
+          "user"
+        ],
+        "extensionKeys": [
+          "code",
+          "exception"
+        ],
+        "path": [
+          "accounts"
+        ]
+      }
+    ]
   },
   {
     "operation": "Org List",
     "passed": true,
-    "http": 200
+    "http": 200,
+    "activeAcceptedCount": 1
   },
   {
     "operation": "Project List",
     "passed": true,
-    "http": 200
+    "http": 200,
+    "projectCount": 1
   },
   {
     "operation": "Project List",
     "passed": true,
-    "http": 200
+    "http": 200,
+    "projectCount": 1
   },
   {
     "operation": "Module List",
     "passed": true,
-    "http": 200
+    "http": 200,
+    "downlinkInterfaceCount": 103
+  },
+  {
+    "operation": "Hardware List",
+    "passed": true,
+    "http": 200,
+    "count": 142
+  },
+  {
+    "operation": "Network List",
+    "passed": true,
+    "http": 200,
+    "count": 7
+  },
+  {
+    "operation": "Cluster List",
+    "passed": false,
+    "codes": [
+      "INTERNAL_SERVER_ERROR"
+    ]
   },
   {
     "operation": "Device List",
