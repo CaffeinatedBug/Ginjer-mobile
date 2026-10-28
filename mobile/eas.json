@@ -1,0 +1,25 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_GINJER_API_URL": "https://prodapi.ginjer.io/graphql"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_GINJER_API_URL": "https://prodapi.ginjer.io/graphql"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  }
+}
