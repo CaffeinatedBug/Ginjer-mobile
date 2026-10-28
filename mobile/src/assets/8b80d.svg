@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Map marker">
+<rect width="30" height="30" rx="15" fill="#FD684E" fill-opacity="0.2"/>
+<path id="Icon" d="M15 23C12.7833 23 10.8958 22.3544 9.3375 21.0632C7.77917 19.7719 7 18.2 7 16.3474C7 15.4632 7.20417 14.6175 7.6125 13.8105C8.02083 13.0035 8.6 12.2912 9.35 11.6737L15 7L20.65 11.6737C21.4 12.2912 21.9792 13.0035 22.3875 13.8105C22.7958 14.6175 23 15.4632 23 16.3474C23 18.2 22.2208 19.7719 20.6625 21.0632C19.1042 22.3544 17.2167 23 15 23Z" fill="#FD684E"/>
+</g>
+</svg>
