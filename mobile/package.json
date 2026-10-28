@@ -29,6 +29,7 @@
     "zustand": "^5.0.16"
   },
   "devDependencies": {
+    "@studyflash/eslint-plugin-react-native-a11y": "^4.0.1",
     "@testing-library/react-native": "^14.1.0",
     "@types/jest": "^30.0.0",
     "@types/react": "~19.3.0",
@@ -40,8 +41,14 @@
     "prettier": "^3.9.10",
     "typescript": "~6.0.3"
   },
+  "overrides": {
+    "@expo/cli": {
+      "zod": "^4.6.7"
+    }
+  },
   "scripts": {
     "start": "expo start",
+    "start:lan": "expo start --lan --port 8082",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
