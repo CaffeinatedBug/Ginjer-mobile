@@ -9,3 +9,4 @@ reference/
 ginjer-mobile-app/
 Ginjer APIs.postman_collection*.json
 *.fig
+.scaffold-git/
