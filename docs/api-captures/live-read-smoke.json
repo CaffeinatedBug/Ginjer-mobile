@@ -1,0 +1,41 @@
+[
+  {
+    "operation": "Sign In",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "operation": "Org List",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "operation": "Project List",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "operation": "Project List",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "operation": "Module List",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "operation": "Device List",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 0,
+    "fieldTypes": {}
+  },
+  {
+    "operation": "Device Details",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 0,
+    "fieldTypes": {}
+  }
+]

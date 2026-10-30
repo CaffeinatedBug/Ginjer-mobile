@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+.env*
+!.env.example
+*.jks
+*.keystore
+reference/
+ginjer-mobile-app/
+Ginjer APIs.postman_collection*.json
+*.fig

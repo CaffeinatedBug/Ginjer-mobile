@@ -1,0 +1,1494 @@
+{
+  "data": {
+    "__schema": {
+      "queryType": {
+        "name": "Query",
+        "fields": [
+          {
+            "name": "modules",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "checkUsageOfModuleValues",
+            "args": [
+              {
+                "name": "checkModuleUsage",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CheckModuleUsageInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Response"
+              }
+            }
+          },
+          {
+            "name": "deviceHistoricalData",
+            "args": [
+              {
+                "name": "deviceHistoricalParams",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "DeviceHistoricalInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DeviceHistoricalData"
+              }
+            }
+          },
+          {
+            "name": "alertDownlinks",
+            "args": [
+              {
+                "name": "alertDownlinksParams",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AlertDownlinksInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AlertDownlinks"
+              }
+            }
+          },
+          {
+            "name": "deviceLogs",
+            "args": [
+              {
+                "name": "deviceParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "DeviceParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Logs",
+              "ofType": null
+            }
+          },
+          {
+            "name": "sendDownlink",
+            "args": [
+              {
+                "name": "action",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SendDownlinkInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "LogDetail"
+              }
+            }
+          },
+          {
+            "name": "sendDownlinkThroughMQTT",
+            "args": [
+              {
+                "name": "action",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SendDownlinkInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean"
+              }
+            }
+          },
+          {
+            "name": "setDeviceConfigurationThroughMQTT",
+            "args": [
+              {
+                "name": "action",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SendDownlinkInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean"
+              }
+            }
+          },
+          {
+            "name": "mobileAppAction",
+            "args": [
+              {
+                "name": "action",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "MobileAppActionInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "LogDetail"
+              }
+            }
+          },
+          {
+            "name": "mobileApps",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "hardwareList",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "networkList",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "solutionList",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "solutionListWithProjects",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "application",
+            "args": [
+              {
+                "name": "type",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Application"
+              }
+            }
+          },
+          {
+            "name": "signIn",
+            "args": [
+              {
+                "name": "auth",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SignInInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "User"
+              }
+            }
+          },
+          {
+            "name": "verify",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "User"
+              }
+            }
+          },
+          {
+            "name": "userList",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "projects",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "projectOverview",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "accounts",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "organisations",
+            "args": [
+              {
+                "name": "search",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              {
+                "name": "pageInfo",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "PageInfoInput",
+                  "ofType": null
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "OrganisationList"
+              }
+            }
+          },
+          {
+            "name": "organisationUsers",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "organisationDeviceCount",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int"
+              }
+            }
+          },
+          {
+            "name": "clusters",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ClusterParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "mobileAppWiseClusters",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ClusterParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "alerts",
+            "args": [
+              {
+                "name": "alertParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AlertParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "triggeredAlerts",
+            "args": [
+              {
+                "name": "triggeredAlertParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TriggeredAlertParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "getHistoricalTriggeredAlert",
+            "args": [
+              {
+                "name": "alertHistoricalParams",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "HistoricalAlertDataInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "getWidgetDetails",
+            "args": [
+              {
+                "name": "getWidgetInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GetWidgetsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "activeTriggeredAlerts",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ClusterParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "activeTriggeredAlertsForMultipleMobileAppIds",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ClusterParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "HistoricalDeviceData",
+            "args": [
+              {
+                "name": "HistoricalDeviceDataInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "HistoricalDeviceDataInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "JsonObject"
+              }
+            }
+          },
+          {
+            "name": "getGPSSupportedDeviceData",
+            "args": [
+              {
+                "name": "historicalGPSDeviceDataInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "HistoricalGPSDeviceDataInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DeviceHistoricalData"
+              }
+            }
+          },
+          {
+            "name": "getNonLoRaWANDeviceList",
+            "args": [
+              {
+                "name": "nonLoRaWANDeviceParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "NonLoRaWANDeviceParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "getGeoFenceList",
+            "args": [
+              {
+                "name": "geoFenceParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GeoFenceParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "getAllReports",
+            "args": [
+              {
+                "name": "paramInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "getReportData",
+            "args": [
+              {
+                "name": "reportDataParams",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ReportDataParams"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DeviceHistoricalData"
+              }
+            }
+          },
+          {
+            "name": "getDehnConfiguration",
+            "args": [
+              {
+                "name": "getDehnConfigInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GetDehnConfigInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "DehnConfigurationData",
+              "ofType": null
+            }
+          },
+          {
+            "name": "getDehnAction",
+            "args": [
+              {
+                "name": "devEui",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "alertSchedule",
+            "args": [
+              {
+                "name": "alertScheduleParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AlertScheduleParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "AlertSchedule",
+              "ofType": null
+            }
+          },
+          {
+            "name": "alertSchedules",
+            "args": [
+              {
+                "name": "alertScheduleParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AlertScheduleParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "paymentStatus",
+            "args": [
+              {
+                "name": "input",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PaymentStatusInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Payment"
+              }
+            }
+          },
+          {
+            "name": "paymentHistory",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "fetchPaymentHistory",
+            "args": [
+              {
+                "name": "input",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "FetchPaymentHistoryInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "downloadInvoice",
+            "args": [
+              {
+                "name": "input",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "DownloadInvoiceInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DownloadInvoiceResponse"
+              }
+            }
+          },
+          {
+            "name": "organisationSubscription",
+            "args": [
+              {
+                "name": "params",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ParamInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "OrganisationSubscription"
+              }
+            }
+          },
+          {
+            "name": "getFavoriteDownlinks",
+            "args": [
+              {
+                "name": "favoriteDownlinkParamsInput",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "FavoriteDownlinkParamsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null
+              }
+            }
+          },
+          {
+            "name": "automationRuns",
+            "args": [
+              {
+                "name": "automationRunsParams",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AutomationRunsInput"
+                  }
+                }
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AlertAutomationRuns"
+              }
+            }
+          }
+        ]
+      },
+      "mutationType": {
+        "name": "Mutation",
+        "fields": [
+          {
+            "name": "saveModuleValues"
+          },
+          {
+            "name": "saveDevice"
+          },
+          {
+            "name": "saveDeviceList"
+          },
+          {
+            "name": "deleteDevice"
+          },
+          {
+            "name": "saveDehnConfigurationAction"
+          },
+          {
+            "name": "saveMobileApp"
+          },
+          {
+            "name": "checkMobileAppDependency"
+          },
+          {
+            "name": "deleteMobileApp"
+          },
+          {
+            "name": "saveHardware"
+          },
+          {
+            "name": "saveHardwareConfiguration"
+          },
+          {
+            "name": "deleteHardware"
+          },
+          {
+            "name": "getOutputConfigurationDependency"
+          },
+          {
+            "name": "saveNonLoRaWANHardwareConfiguration"
+          },
+          {
+            "name": "getNonLoRaWANDeviceDataFieldDependency"
+          },
+          {
+            "name": "getDropdownDependency"
+          },
+          {
+            "name": "saveHardwareImage"
+          },
+          {
+            "name": "generateServerKey"
+          },
+          {
+            "name": "saveNetworkConfiguration"
+          },
+          {
+            "name": "deleteNetworkServerKey"
+          },
+          {
+            "name": "deleteNetworkAPIKey"
+          },
+          {
+            "name": "saveNetwork"
+          },
+          {
+            "name": "checkNetworkDependency"
+          },
+          {
+            "name": "deleteNetwork"
+          },
+          {
+            "name": "checkMQTTNetworkDependency"
+          },
+          {
+            "name": "saveNetworkImage"
+          },
+          {
+            "name": "saveSolution"
+          },
+          {
+            "name": "saveSolutionConfiguration"
+          },
+          {
+            "name": "deleteSolution"
+          },
+          {
+            "name": "getDeviceHardwareDependency"
+          },
+          {
+            "name": "saveSolutionImage"
+          },
+          {
+            "name": "updateMaintenance"
+          },
+          {
+            "name": "signUp"
+          },
+          {
+            "name": "resendEmail"
+          },
+          {
+            "name": "forgotPassword"
+          },
+          {
+            "name": "decodeUserToken"
+          },
+          {
+            "name": "updatePassword"
+          },
+          {
+            "name": "adminResetPassword"
+          },
+          {
+            "name": "releasePopup"
+          },
+          {
+            "name": "editUser"
+          },
+          {
+            "name": "updateUserProfile"
+          },
+          {
+            "name": "deleteUserRole"
+          },
+          {
+            "name": "toggleAdminStatus"
+          },
+          {
+            "name": "inviteUser"
+          },
+          {
+            "name": "acceptOrganisationInvite"
+          },
+          {
+            "name": "rejectInvite"
+          },
+          {
+            "name": "assignProjectToUser"
+          },
+          {
+            "name": "toggleUserProjectStatus"
+          },
+          {
+            "name": "toggleUserActiveStatus"
+          },
+          {
+            "name": "saveProject"
+          },
+          {
+            "name": "saveProjectImage"
+          },
+          {
+            "name": "toggleProjectStatus"
+          },
+          {
+            "name": "deleteProject"
+          },
+          {
+            "name": "updateDashboardWidgetOrder"
+          },
+          {
+            "name": "activateAccount"
+          },
+          {
+            "name": "startFreeTrialAccount"
+          },
+          {
+            "name": "updateLicense"
+          },
+          {
+            "name": "createLicense"
+          },
+          {
+            "name": "updateSMSEnabled"
+          },
+          {
+            "name": "updateOrganisationLicense"
+          },
+          {
+            "name": "updateOrganisationActive"
+          },
+          {
+            "name": "updateOrganisationsActive"
+          },
+          {
+            "name": "licenseUpdateRequest"
+          },
+          {
+            "name": "saveCluster"
+          },
+          {
+            "name": "updatePinPosition"
+          },
+          {
+            "name": "assignClustersToUser"
+          },
+          {
+            "name": "deleteCluster"
+          },
+          {
+            "name": "updateFirebaseToken"
+          },
+          {
+            "name": "deleteFirebaseToken"
+          },
+          {
+            "name": "createAlert"
+          },
+          {
+            "name": "createAutomationAlert"
+          },
+          {
+            "name": "toggleAlert"
+          },
+          {
+            "name": "toggleClusterConfiguration"
+          },
+          {
+            "name": "toggleDeviceConfiguration"
+          },
+          {
+            "name": "toggleMasterDeviceConfiguration"
+          },
+          {
+            "name": "manualAutomation"
+          },
+          {
+            "name": "deleteAlert"
+          },
+          {
+            "name": "alertSeenByUser"
+          },
+          {
+            "name": "updateTriggeredAlertStatus"
+          },
+          {
+            "name": "updatePage"
+          },
+          {
+            "name": "deletePage"
+          },
+          {
+            "name": "saveWidget"
+          },
+          {
+            "name": "deleteWidget"
+          },
+          {
+            "name": "toggleWidgetPublicViewStatus"
+          },
+          {
+            "name": "toggleWidgetPublishedStatus"
+          },
+          {
+            "name": "updateWidgetOrder"
+          },
+          {
+            "name": "addWidgetToReports"
+          },
+          {
+            "name": "saveNonLoRaWANDevice"
+          },
+          {
+            "name": "deleteNonLoRaWANDevice"
+          },
+          {
+            "name": "saveGeoFence"
+          },
+          {
+            "name": "deleteGeoFence"
+          },
+          {
+            "name": "updateReport"
+          },
+          {
+            "name": "deleteReport"
+          },
+          {
+            "name": "togglePublicReportStatus"
+          },
+          {
+            "name": "updateReportWidgetOrder"
+          },
+          {
+            "name": "toggleFavouriteReportStatus"
+          },
+          {
+            "name": "toggleWidgetsInReports"
+          },
+          {
+            "name": "saveDeviceFuOTA"
+          },
+          {
+            "name": "saveDehnFuotaAction"
+          },
+          {
+            "name": "saveDehnConfiguration"
+          },
+          {
+            "name": "saveAlertSchedule"
+          },
+          {
+            "name": "updateAlertSchedule"
+          },
+          {
+            "name": "deleteAlertSchedule"
+          },
+          {
+            "name": "createPaymentTransaction"
+          },
+          {
+            "name": "downgradeSubscription"
+          },
+          {
+            "name": "cancelSubscription"
+          },
+          {
+            "name": "saveFavoriteDownlink"
+          }
+        ]
+      }
+    }
+  }
+}
