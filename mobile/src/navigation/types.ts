@@ -12,6 +12,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   Home: NavigatorScreenParams<TabParamList> | undefined;
   AddDevice: undefined;
+  ProjectWorkspace: undefined;
   DeviceDetails: { deviceId: string };
   EditProfile: undefined;
   Notifications: undefined;

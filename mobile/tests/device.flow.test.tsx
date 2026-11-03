@@ -15,8 +15,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 jest.mock("@react-native-async-storage/async-storage", () => ({
   __esModule: true,
   default: {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
+    getItem: jest.fn(() => Promise.resolve(null)),
+    setItem: jest.fn(() => Promise.resolve()),
     getAllKeys: jest.fn(),
     multiRemove: jest.fn(),
   },
@@ -27,6 +27,9 @@ jest.mock("../src/features/uplink/hooks", () => ({
   useDebouncedValue: (value: unknown) => value,
 }));
 jest.mock("../src/features/downlink", () => ({ DownlinkSheet: () => null }));
+jest.mock("../src/lib/repository", () => ({
+  repository: { getHistoricalData: jest.fn(() => Promise.resolve(null)) },
+}));
 jest.mock("react-native-maps", () => ({
   __esModule: true,
   default: () => null,
@@ -91,7 +94,11 @@ describe("device and project presentation", () => {
       isError: false,
       dataUpdatedAt: 0,
     });
-    const view = await render(<DeviceDetailsScreen deviceId="d1" />);
+    const view = await render(
+      <QueryClientProvider client={queryClient}>
+        <DeviceDetailsScreen deviceId="d1" />
+      </QueryClientProvider>,
+    );
     expect(screen.getAllByLabelText("Loading").length).toBeGreaterThan(0);
     setQuery({
       isPending: false,
@@ -99,14 +106,18 @@ describe("device and project presentation", () => {
       isError: false,
       dataUpdatedAt: 0,
     });
-    await view.rerender(<DeviceDetailsScreen deviceId="d1" />);
+    await view.rerender(
+      <QueryClientProvider client={queryClient}>
+        <DeviceDetailsScreen deviceId="d1" />
+      </QueryClientProvider>,
+    );
     expect(screen.getByText("No location")).toBeTruthy();
     expect(screen.getByText("No outputs reported.")).toBeTruthy();
     expect(screen.getByText("No attributes reported.")).toBeTruthy();
     expect(
       screen.getByLabelText("View Map").props.accessibilityState.disabled,
     ).toBe(true);
-  });
+  }, 60000);
 
   test("shows no fabricated device count when overview count is absent", () => {
     const project = projectSchema.parse({

@@ -4,7 +4,7 @@ import { request } from "../../lib/graphql";
 import { operations } from "../../lib/operations";
 import { downlinkResultSchema } from "../../lib/contracts";
 import { ApiError } from "../../lib/errors";
-import { API_URL } from "../../lib/config";
+import { API_URL, DOWNLINK_API_URL } from "../../lib/config";
 const inFlight = new Set<string>();
 export const actionSchema = z.object({
   organisationId: z.string().min(1),
@@ -56,9 +56,16 @@ export async function sendDownlink(input: DownlinkAction) {
     try {
       const response = await request(
         operations.SendDownlink,
-        { action },
+        {
+          action: {
+            ...action,
+            // prodapi's downlink resolver expects the controller value itself,
+            // not the devapi { value } wrapper.
+            value: action.value.value,
+          },
+        },
         z.object({ sendDownlink: downlinkResultSchema }),
-        { mutation: true },
+        { mutation: true, url: DOWNLINK_API_URL },
       );
       if (!response.sendDownlink.message)
         throw new ApiError(
@@ -67,9 +74,21 @@ export async function sendDownlink(input: DownlinkAction) {
         );
       await AsyncStorage.removeItem(key);
       return response.sendDownlink;
-    } catch {
-      // A server-side error does not prove that the controller never saw the command.
-      // Keep the durable lock until the operator verifies the physical device state.
+    } catch (error) {
+      // Authentication and GraphQL validation reject a request before the
+      // controller can receive it. Do not strand the operator behind an
+      // "uncertain" lock when the server has given us a deterministic answer.
+      if (
+        error instanceof ApiError &&
+        (error.kind === "auth" ||
+          error.kind === "validation" ||
+          error.kind === "server")
+      ) {
+        await AsyncStorage.removeItem(key);
+        throw error;
+      }
+      // A timeout, transport failure, or server failure does not prove that the
+      // controller never saw the command. Keep the durable lock in those cases.
       throw new ApiError(
         "Delivery is uncertain. Verify the device before sending again.",
         "uncertain",

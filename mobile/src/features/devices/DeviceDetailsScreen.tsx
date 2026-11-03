@@ -20,6 +20,9 @@ import { useDevices, useNow } from "../uplink/hooks";
 import { DownlinkSheet } from "../downlink";
 import { useWorkspace } from "../../lib/workspace";
 import { devicePoint } from "../locations/clusters";
+import { useQuery } from "@tanstack/react-query";
+import { repository } from "../../lib/repository";
+import { extractHistoryPoints } from "./history";
 
 export function DeviceDetailsScreen({
   deviceId,
@@ -35,6 +38,24 @@ export function DeviceDetailsScreen({
   const now = useNow();
   const [downlinkOpen, setDownlinkOpen] = useState(false);
   const device = query.data?.find((item) => item._id === deviceId);
+  const history = useQuery({
+    queryKey: [
+      "history",
+      orgId,
+      deviceId,
+      device?.outputs?.map((o) => o.outputId),
+    ],
+    queryFn: ({ signal }) =>
+      repository.getHistoricalData(
+        orgId,
+        deviceId,
+        (device?.outputs ?? []).map((output) => output.outputId),
+        signal,
+      ),
+    enabled: !!orgId && !!device && (device.outputs?.length ?? 0) > 0,
+    staleTime: 60_000,
+  });
+  const historyPoints = extractHistoryPoints(history.data);
   const point = device ? devicePoint(device) : null;
   const age =
     query.dataUpdatedAt && now
@@ -143,6 +164,43 @@ export function DeviceDetailsScreen({
           ) : (
             <Text style={styles.secondary}>No outputs reported.</Text>
           )}
+          <Text style={styles.section}>Digital twin</Text>
+          {device.outputs?.length || device.attributes?.length ? (
+            <View style={styles.twinCard}>
+              <View style={styles.twinDevice}>
+                {device.outputs?.slice(0, 6).map((output) => (
+                  <View
+                    key={`twin-${output.outputId}`}
+                    style={styles.twinOutput}
+                  >
+                    <View
+                      accessibilityLabel={`${output.outputName || "Output"} state`}
+                      style={[
+                        styles.twinLight,
+                        output.color && /^#[0-9a-f]{3,8}$/i.test(output.color)
+                          ? { backgroundColor: output.color }
+                          : null,
+                      ]}
+                    />
+                    <Text style={styles.twinLabel}>
+                      {output.outputName || "Output"}
+                    </Text>
+                    <Text style={styles.twinValue}>
+                      {formatValue(output.value)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.secondary}>
+                State mirrors the latest reported outputs and attributes.
+                Adjustments use Send Downlink.
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.secondary}>
+              No reported state to visualize.
+            </Text>
+          )}
           <Text style={styles.section}>Attributes</Text>
           {device.attributes?.length ? (
             device.attributes.map((attribute) => (
@@ -155,6 +213,40 @@ export function DeviceDetailsScreen({
             ))
           ) : (
             <Text style={styles.secondary}>No attributes reported.</Text>
+          )}
+          <Text style={styles.section}>History (7 days)</Text>
+          {history.isLoading ? (
+            <Text style={styles.secondary}>Loading historical data…</Text>
+          ) : history.isError ? (
+            <Text accessibilityRole="alert" style={styles.secondary}>
+              Historical data is unavailable: {history.error.message}
+            </Text>
+          ) : historyPoints.length ? (
+            <View style={styles.historyCard}>
+              <View style={styles.chart}>
+                {historyPoints.slice(-24).map((point, index, points) => {
+                  const max = Math.max(...points.map((item) => item.value), 1);
+                  return (
+                    <View
+                      key={`${point.timestamp}-${index}`}
+                      accessibilityLabel={`${point.value} at ${point.timestamp}`}
+                      style={[
+                        styles.chartBar,
+                        { height: Math.max(4, (point.value / max) * 96) },
+                      ]}
+                    />
+                  );
+                })}
+              </View>
+              <Text style={styles.secondary}>
+                Showing {Math.min(historyPoints.length, 24)} latest reported
+                values.
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.secondary}>
+              No numeric history reported for this device.
+            </Text>
           )}
           {point ? (
             <View style={styles.mapPreview}>
@@ -197,6 +289,7 @@ export function DeviceDetailsScreen({
       <DownlinkSheet
         visible={downlinkOpen && !!device}
         deviceId={deviceId}
+        hardwareId={device?.hardwareId}
         onClose={() => setDownlinkOpen(false)}
       />
     </Screen>
@@ -257,6 +350,30 @@ const styles = StyleSheet.create({
     color: theme.accessibleGreen,
     fontSize: 18,
   },
+  twinCard: {
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: theme.surface,
+    gap: 12,
+  },
+  twinDevice: {
+    minHeight: 96,
+    borderRadius: 12,
+    padding: 12,
+    backgroundColor: "#EEF6DF",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  twinOutput: { minWidth: 72, alignItems: "center", gap: 3 },
+  twinLight: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: theme.muted,
+  },
+  twinLabel: { fontFamily: theme.font, color: theme.secondary, fontSize: 11 },
+  twinValue: { fontFamily: theme.bold, color: theme.text, fontSize: 12 },
   attribute: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -265,6 +382,24 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: theme.surface,
     borderRadius: 8,
+  },
+  historyCard: {
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: theme.surface,
+    gap: 10,
+  },
+  chart: {
+    height: 108,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 3,
+  },
+  chartBar: {
+    flex: 1,
+    minWidth: 3,
+    backgroundColor: theme.green,
+    borderRadius: 2,
   },
   mapPreview: {
     height: 170,

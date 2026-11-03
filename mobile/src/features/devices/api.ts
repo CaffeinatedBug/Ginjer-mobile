@@ -3,6 +3,7 @@ import {
   deviceEnrollmentSchema,
   deviceSchema,
   enrollmentChoiceSchema,
+  hardwareSchema,
   type DeviceEnrollment,
 } from "../../lib/contracts";
 import { request } from "../../lib/graphql";
@@ -10,11 +11,24 @@ import { operations } from "../../lib/operations";
 
 const listChoices = z.array(enrollmentChoiceSchema);
 
+export function hardwareControllerIds(
+  hardware: z.infer<typeof hardwareSchema>,
+) {
+  return [
+    ...(hardware.loRaWANConfiguration?.controllers.map(
+      (controller) => controller.moduleId,
+    ) ?? []),
+    ...(hardware.loRaWANConfiguration?.profiles.flatMap(
+      (profile) => profile.downlinkInterfaces,
+    ) ?? []),
+  ];
+}
+
 export function listHardware(organisationId: string, signal?: AbortSignal) {
   return request(
     operations.HardwareList,
     { params: { organisationId } },
-    z.object({ hardwareList: listChoices }),
+    z.object({ hardwareList: z.array(hardwareSchema) }),
     { signal },
   ).then((result) => result.hardwareList.filter((item) => !item.deleted));
 }

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -32,6 +35,8 @@ import {
 } from "./src/features/notifications";
 import { OrganisationSheet } from "./src/features/organisations/OrganisationSheet";
 import { ProjectSheet } from "./src/features/projects/ProjectSheet";
+import { ProjectWorkspaceScreen } from "./src/features/projects/ProjectWorkspaceScreen";
+import { EventBanner } from "./src/features/notifications/EventBanner";
 import type { RootStackParamList, TabParamList } from "./src/navigation/types";
 
 void SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -116,7 +121,15 @@ function HomeTabs({
           )}
         </Tabs.Screen>
         <Tabs.Screen name="Locations" component={LocationsScreen} />
-        <Tabs.Screen name="Analytics" component={AnalyticsScreen} />
+        <Tabs.Screen name="Analytics">
+          {() => (
+            <AnalyticsScreen
+              onSelectDevice={(deviceId) =>
+                navigation.navigate("DeviceDetails", { deviceId })
+              }
+            />
+          )}
+        </Tabs.Screen>
         <Tabs.Screen name="Profile">
           {() => (
             <ProfileScreen
@@ -140,7 +153,12 @@ function HomeTabs({
           }
         />
       )}
-      {sheet === "project" && <ProjectSheet onClose={() => setSheet(null)} />}
+      {sheet === "project" && (
+        <ProjectSheet
+          onClose={() => setSheet(null)}
+          onOpenWorkspace={() => navigation.navigate("ProjectWorkspace")}
+        />
+      )}
       {sheet === "notifications" && (
         <NotificationPanel onClose={() => setSheet(null)} />
       )}
@@ -172,6 +190,19 @@ function AddDeviceRoute({
   return <AddDeviceScreen onBack={() => navigation.goBack()} />;
 }
 
+function ProjectWorkspaceRoute({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList, "ProjectWorkspace">) {
+  return (
+    <ProjectWorkspaceScreen
+      onBack={() => navigation.goBack()}
+      onDevices={() => navigation.navigate("Home", { screen: "Devices" })}
+      onLocations={() => navigation.navigate("Home", { screen: "Locations" })}
+      onNotifications={() => navigation.navigate("Notifications")}
+    />
+  );
+}
+
 function EditProfileRoute() {
   const [organisationOpen, setOrganisationOpen] = useState(false);
   return (
@@ -186,28 +217,50 @@ function EditProfileRoute() {
 
 function AppNavigator() {
   const session = useSession((s) => s.session);
+  const navigationRef = useNavigationContainerRef<RootStackParamList>();
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {session ? (
-          <>
-            <Stack.Screen name="Home" component={HomeTabs} />
-            <Stack.Screen name="AddDevice" component={AddDeviceRoute} />
-            <Stack.Screen name="DeviceDetails" component={DeviceDetailsRoute} />
-            <Stack.Screen name="EditProfile" component={EditProfileRoute} />
-            <Stack.Screen
-              name="Notifications"
-              component={NotificationsScreen}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="SignUp" component={SignUpScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ flex: 1 }}>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {session ? (
+            <>
+              <Stack.Screen name="Home" component={HomeTabs} />
+              <Stack.Screen name="AddDevice" component={AddDeviceRoute} />
+              <Stack.Screen
+                name="ProjectWorkspace"
+                component={ProjectWorkspaceRoute}
+              />
+              <Stack.Screen
+                name="DeviceDetails"
+                component={DeviceDetailsRoute}
+              />
+              <Stack.Screen name="EditProfile" component={EditProfileRoute} />
+              <Stack.Screen
+                name="Notifications"
+                component={NotificationsScreen}
+              />
+            </>
+          ) : (
+            <>
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="SignUp" component={SignUpScreen} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+      {session && (
+        <EventBanner
+          onDevice={(deviceId) => {
+            if (navigationRef.isReady())
+              navigationRef.navigate("DeviceDetails", { deviceId });
+          }}
+          onNotifications={() => {
+            if (navigationRef.isReady())
+              navigationRef.navigate("Notifications");
+          }}
+        />
+      )}
+    </View>
   );
 }
 

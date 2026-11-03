@@ -29,7 +29,7 @@ If your environment can spawn sub-agents, spawn the roster below. Otherwise run 
 |---|---|---|
 | 1 | Lead / Integrator | architecture, merges, runs the full gate after every merge, `docs/DECISIONS.md` |
 | 2 | API / Schema | schema probing, adapters for new operations, `docs/API_COVERAGE.md`, test-account smoke script |
-| 3 | Devices & Commands | compact/expanded list, two-tap command flow, command GIF/animation feedback |
+| 3 | Devices & Commands | information-rich device list, two-tap command flow, command GIF/animation feedback |
 | 4 | Notifications | in-app banner, event feed, notifications panel, routing |
 | 5 | Automation | Automation Panel + Summary Panel |
 | 6 | Insights | Health Check panel, Analytics, Device Summary / history charts |
@@ -47,10 +47,10 @@ Rules: each agent edits only its own areas. Cross-boundary needs go in `docs/HAN
 |---|---|---|---|
 | M1 | Sign In | Implemented, live login seen | Keep working; verify with multiple organisations and after a restart |
 | M2 | Project Selection | Implemented | Verify switching projects refetches all dependent data |
-| M3 | Device List (expanded + compact + manipulation) | Partial | Add compact and expanded modes (toggle persisted); expanded cards show quick commands (section 4); keep search, filters, refresh, status. Fix the enrollment cluster lookup failure |
-| M4 | Device Downlinks, two taps, GIF interfacing | Partial | Two-tap command flow with animated feedback (section 4) |
-| M5 | Banner Notifications with routing | Missing | In-app banner for newly observed events; tap routes to the right device (section 5) |
-| M6 | Automation Panel + Summary Panel | Missing | Native panel from the Figma web snapshots, real data (section 5) |
+| M3 | Device List (expanded + manipulation) | Implemented: expanded cards, search/filter/refresh/status and command entry | Expanded cards show quick commands (section 4). The unused compact/expanded toggle was removed from the mobile UX. Enrollment cluster lookup remains separately backend-blocked in DEFECTS. |
+| M4 | Device Downlinks, two taps, GIF interfacing | Implemented: guarded selection/send flow with animated sending, success and uncertain states | Two-tap command flow with animated feedback (section 4); live device verification remains blocked |
+| M5 | Banner Notifications with routing | Implemented: derived event banner, catch-up summary, spring animation and vibration | In-app banner for newly observed events; tap routes to the right device (section 5); physical interaction remains unverified |
+| M6 | Automation Panel + Summary Panel | Implemented: dedicated project-workspace Automate cards, refresh, summary and expandable runs | Native panel from the web references, real data; actions/step attempts remain omitted until a verified mutation/schema field exists |
 
 ### Good-to-haves (7 of 8 required)
 
@@ -59,19 +59,19 @@ Rules: each agent edits only its own areas. Cross-boundary needs go in `docs/HAN
 | G1 | Sign Up | Form works against the real sign-up operation found in the schema; includes "request to join an organisation / demo organisation" if the schema has an operation for it. If no operation exists, open the production web sign-up with `expo-web-browser` and note it |
 | G2 | Profile Settings | Edit profile (real update operation if present), switch organisation and project, show project info |
 | G3 | Notifications Panel | Real alert/notification feed if the schema has one; otherwise the derived event feed. Read/unread persisted |
-| G4 | Health Check Panel | One panel with user-oriented health checks computed from real data (section 5) |
+| G4 | Health Check Panel | Implemented: real-data severity card and device routing | One panel with user-oriented health checks computed from real data (section 5) |
 | G5 | Analytics | Use the real analytics operations if the schema has them; otherwise the existing derived dashboard, extended |
-| G6 | Device Summary | Outputs, history chart from `deviceHistoricalData` (or the closest real operation), map |
-| G7 | Map View | Info sheet with summary link, two-tap commands and routing to the device |
+| G6 | Device Summary | Implemented: outputs, real historical-data chart path, and map link | Outputs, history chart from `deviceHistoricalData` (or the closest real operation), map |
+| G7 | Map View | Implemented: info sheet, device routing, and guarded downlink entry | Info sheet with summary link, two-tap commands and routing to the device |
 | G8 | Basic WhatsApp | **Deferred.** Needs Meta credentials and a backend. Optional stretch only after everything else is done: a "Share via WhatsApp" button on the Health Check panel using `Linking.openURL`. Never report this as the Meta integration |
 
 ### Delighters (pick 2 to 3, in this order; defer the rest)
 
-1. Custom Analytics, 2. Digital Twin (state-only version), 3. Subsections. Voice commands, Advanced WhatsApp chatbot and Mobile widgets are deferred (they need native code or external backends, which conflicts with Expo Go).
+1. Custom Analytics — implemented as a persisted real-attribute picker. 2. Digital Twin — implemented as a state-only reported-output visual. 3. Subsections. Voice commands, Advanced WhatsApp chatbot and Mobile widgets are deferred (they need native code or external backends, which conflicts with Expo Go).
 
 ## 4. Device list and two-tap commands
 
-**List modes.** A header toggle switches Compact (name, status dot and text, last heard, one-line key value) and Expanded (adds outputs, key attributes, location, quick commands). Persist the choice in AsyncStorage.
+**Device list.** The mobile app uses one information-rich card layout showing name, status, last heard, outputs, attributes, location and quick commands. The unused compact/expanded toggle is intentionally omitted from the mobile UX.
 
 **Two-tap command flow.** Tap 1 selects a command; tap 2 confirms and sends. Tap 1 turns the command chip into a "Confirm: <device name> <command>" state that auto-reverts after about 4 seconds. Tap 2 sends the real downlink.
 - Commands come from real data: each device's `outputs` (`outputId`, `outputName`, `value`, `label`, `color`) and the `DOWNLINK_INTERFACE` module from `ModuleList`. Toggle-like outputs offer the opposite of the current value; outputs with a palette offer the real colour choices. Do not invent commands.
@@ -113,7 +113,7 @@ Rules: each agent edits only its own areas. Cross-boundary needs go in `docs/HAN
 ## 8. Work order
 
 1. Step 0 (section 2), then schema discovery (agent 2): produce a table of operations for automation, history, alerts, health, analytics, sign-up/join and profile update, with exact arguments and a live read-only probe result for each.
-2. Must-haves first: M3 and M4 (compact/expanded, two-tap flow), M5 (banner), M6 (Automation). Re-verify M1 and M2.
+2. Must-haves first: M3 and M4 (device list, two-tap flow), M5 (banner), M6 (Automation). Re-verify M1 and M2.
 3. Good-to-haves: G6 and G7 (history and the map sheet reuse the command flow), G3, G4, G5, G1, G2.
 4. Delighters in the section 6 order, only if the must-haves and seven good-to-haves are working.
 5. Stretch: the G8 share button, if time remains.

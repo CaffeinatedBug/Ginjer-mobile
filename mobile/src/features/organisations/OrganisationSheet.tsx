@@ -20,6 +20,8 @@ export function OrganisationSheet({
     queryKey: ["organisations"],
     queryFn: ({ signal }) => repository.listOrganisations(signal),
     enabled: visible,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
   const items = useMemo(
     () =>
@@ -55,6 +57,16 @@ export function OrganisationSheet({
         label="Search Organization"
         value={search}
         onChangeText={setSearch}
+      />
+      <Button
+        title={
+          query.isFetching
+            ? "Refreshing organizations…"
+            : "Refresh organizations"
+        }
+        variant="secondary"
+        disabled={query.isFetching || saving}
+        onPress={() => void query.refetch()}
       />
       {query.isPending ? (
         <>

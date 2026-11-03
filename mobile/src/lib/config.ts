@@ -13,6 +13,10 @@ export const API_URL = validateConfig(
   process.env.EXPO_PUBLIC_GINJER_API_URL,
   __DEV__,
 );
-export const POLL_INTERVAL_MS = 30_000;
+// Accounts and live telemetry currently run on devapi, while the LoRaWAN
+// downlink dispatcher is hosted on production.
+export const DOWNLINK_API_URL = PROD_URL;
+// Foreground device views refresh from Ginjer every 20 seconds.
+export const POLL_INTERVAL_MS = 20_000;
 export const ONLINE_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 export const REQUEST_TIMEOUT_MS = 20_000;
