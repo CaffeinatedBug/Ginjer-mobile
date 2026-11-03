@@ -39,6 +39,7 @@ import {
 } from "../uplink/hooks";
 import { NotificationPanel, useCurrentEvents } from "../notifications";
 import { clusterPoints, devicePoint } from "./clusters";
+import { DownlinkSheet } from "../downlink";
 export function LocationsScreen() {
   const query = useDevices(true);
   const now = useNow();
@@ -52,6 +53,7 @@ export function LocationsScreen() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Device | null>(null);
   const [notifications, setNotifications] = useState(false);
+  const [commandDeviceId, setCommandDeviceId] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [delta, setDelta] = useState(0.05);
@@ -279,7 +281,22 @@ export function LocationsScreen() {
               navigation.navigate("DeviceDetails", { deviceId });
             }}
           />
+          <Button
+            title="Send Command"
+            variant="secondary"
+            onPress={() => setCommandDeviceId(selected._id)}
+          />
         </Sheet>
+      )}
+      {commandDeviceId && (
+        <DownlinkSheet
+          visible
+          deviceId={commandDeviceId}
+          hardwareId={
+            devices.find((device) => device._id === commandDeviceId)?.hardwareId
+          }
+          onClose={() => setCommandDeviceId(null)}
+        />
       )}
       {notifications && (
         <NotificationPanel onClose={() => setNotifications(false)} />

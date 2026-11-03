@@ -149,6 +149,31 @@
       }
     },
     {
+      "name": "Hardware List",
+      "request": {
+        "method": "POST",
+        "url": "{{GINJER_API_URL}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "{{SESSION_TOKEN}}"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query HardwareList($params: ParamInput!) {\n  hardwareList(params: $params) {\n    _id\n    organisationId\n    name\n    description\n    tagId\n    modelNo\n    manufacturerId\n    gpsSupported\n    loRaWANConfiguration {\n      controllers { moduleId code }\n      profiles {\n        _id\n        name\n        description\n        downlinkInterfaces\n      }\n    }\n    nonLoRaWANConfiguration {\n      moduleId\n      type\n      dropdownOptions { option }\n      dropdownType\n      inputFieldType\n      defaultValue\n      required\n      characterLimit\n      isDefaultValue\n      isCharacterLimit\n    }\n    type\n    deleted\n    emulatePDU\n    jsonOutput\n  }\n}\n",
+            "variables": "{\"params\":{\"organisationId\":\"{{ORGANISATION_ID}}\"}}"
+          }
+        },
+        "description": "Returns hardware definitions. A selected hardware profile's downlinkInterfaces contains the hardware-specific downlink IDs. Use Module List as the organization-wide fallback."
+      }
+    },
+    {
       "name": "Send Downlink",
       "request": {
         "method": "POST",

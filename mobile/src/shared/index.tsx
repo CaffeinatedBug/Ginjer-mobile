@@ -314,6 +314,13 @@ export function Icon({
     devices: <Path d="M5 17h14v4H5zM8 13h8M10 9h4M12 3v6" />,
     map: <Path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15" />,
     chart: <Path d="M4 20V10M9 20V5M14 20v-7M19 20V3M2 20h20" />,
+    automation: <Path d="m13 2-9 12h7l-1 8 10-13h-7z" />,
+    report: (
+      <>
+        <Rect x="5" y="3" width="14" height="18" rx="1" />
+        <Path d="M8 8h8M8 12h8M8 16h5" />
+      </>
+    ),
     user: (
       <>
         <Circle cx="12" cy="8" r="4" />

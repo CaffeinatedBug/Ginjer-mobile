@@ -18,6 +18,7 @@ export async function request<T>(
     signal?: AbortSignal;
     mutation?: boolean;
     authenticated?: boolean;
+    url?: string;
   } = {},
 ): Promise<T> {
   const controller = new AbortController();
@@ -28,7 +29,7 @@ export async function request<T>(
   const authenticated = options.authenticated !== false;
   const token = authenticated ? getToken() : undefined;
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(options.url ?? API_URL, {
       method: "POST",
       redirect: "error",
       headers: {

@@ -12,19 +12,30 @@ queries['Network List']='''query NetworkList($params: ParamInput!) {
 queries['Cluster List']='''query ClusterList($params: ClusterParamInput!) {
   clusters(params: $params) { _id name deleted }
 }'''
+queries['Organisation Users']='''query OrganisationUsers($params: ParamInput!) {
+  organisationUsers(params: $params) {
+    _id firstName lastName emailId organisationId role { isAdmin } isSuperUser
+  }
+}'''
 token=None
 results=[]
 def call(name,variables):
  global token
  headers={'Content-Type':'application/json'}
  if token: headers['authorization']=token
- r=urllib.request.urlopen(urllib.request.Request('https://devapi.ginjer.io/graphql',data=json.dumps({'query':queries[name],'variables':variables}).encode(),headers=headers),timeout=30)
- j=json.load(r)
+ try:
+  r=urllib.request.urlopen(urllib.request.Request('https://devapi.ginjer.io/graphql',data=json.dumps({'query':queries[name],'variables':variables}).encode(),headers=headers),timeout=30)
+  j=json.load(r)
+ except urllib.error.HTTPError as error:
+  j=json.load(error)
+  results.append({'operation':name,'passed':False,'http':error.code,'codes':[x.get('extensions',{}).get('code','UNCLASSIFIED') for x in j.get('errors',[])]})
+  return None
  if j.get('errors'): results.append({'operation':name,'passed':False,'codes':[x.get('extensions',{}).get('code','UNCLASSIFIED') for x in j['errors']]});return None
  results.append({'operation':name,'passed':True,'http':r.status})
  if name=='Org List': results[-1]['activeAcceptedCount']=sum(bool(x.get('isActive') and x.get('isAccepted')) for x in j['data'].get('accounts',[]))
  if name=='Project List': results[-1]['projectCount']=len(j['data'].get('projectOverview',[]))
  if name=='Module List': results[-1]['downlinkInterfaceCount']=sum(x.get('moduleType')=='DOWNLINK_INTERFACE' for x in j['data'].get('modules',[]))
+ if name=='Organisation Users': results[-1]['userCount']=len(j['data'].get('organisationUsers',[]))
  if name in ('Hardware List','Network List','Cluster List'): results[-1]['count']=len(next(iter(j['data'].values()),[]))
  return j['data']
 def expect_auth_rejection(name,variables,test_token=None):
@@ -58,6 +69,7 @@ try:
   for account in (a or {}).get('accounts',[]):
    if not account.get('isActive') or not account.get('isAccepted'): continue
    org=account['organisationId'];p=call('Project List',{'params':{'organisationId':org}})
+   call('Organisation Users',{'params':{'organisationId':org}})
    call('Module List',{'params':{'organisationId':org}})
    call('Hardware List',{'params':{'organisationId':org}})
    call('Network List',{'params':{'organisationId':org}})

@@ -16,6 +16,16 @@ export const userSchema = z.object({
 });
 export const sessionSchema = userSchema.extend({ token: z.string().min(1) });
 export type User = z.infer<typeof userSchema>;
+export const projectUserSchema = z.object({
+  _id: z.string(),
+  firstName: text,
+  lastName: text,
+  emailId: text,
+  organisationId: text,
+  role: z.object({ isAdmin: z.boolean().nullish() }).nullish(),
+  isSuperUser: z.boolean().nullish(),
+});
+export type ProjectUser = z.infer<typeof projectUserSchema>;
 export type Session = z.infer<typeof sessionSchema>;
 export const organisationSchema = z.object({
   organisationId: z.string(),
@@ -109,6 +119,30 @@ export const moduleSchema = z.object({
   organisationId: text,
 });
 export type Module = z.infer<typeof moduleSchema>;
+export const automationRunSchema = z.object({
+  _id: z.string(),
+  organisationId: z.string(),
+  projectId: z.string(),
+  alertId: z.string(),
+  trigger: z.string(),
+  triggeredAt: z.string(),
+  triggerDeviceId: text,
+  state: z.string(),
+  active: z.boolean(),
+  currentStep: z.number(),
+  updatedAt: z.string(),
+  finishedAt: text,
+});
+export type AutomationRun = z.infer<typeof automationRunSchema>;
+export const automationAlertSchema = z.object({
+  _id: z.string(),
+  name: text,
+  active: z.boolean().nullish(),
+  deleted: z.boolean().nullish(),
+});
+export type AutomationAlert = z.infer<typeof automationAlertSchema>;
+export const historicalDataSchema = z.unknown();
+export type HistoricalData = z.infer<typeof historicalDataSchema>;
 export const downlinkResultSchema = z.object({
   timestamp: z.union([z.string(), z.number()]).nullish(),
   type: text,
@@ -123,6 +157,32 @@ export const enrollmentChoiceSchema = z.object({
   networkInterface: z.array(z.string()).optional(),
 });
 export type EnrollmentChoice = z.infer<typeof enrollmentChoiceSchema>;
+export const hardwareSchema = enrollmentChoiceSchema.extend({
+  organisationId: text,
+  description: text,
+  modelNo: text,
+  manufacturerId: text,
+  gpsSupported: z.boolean().nullish(),
+  loRaWANConfiguration: z
+    .object({
+      controllers: z.array(
+        z.object({
+          moduleId: z.string(),
+          code: text,
+        }),
+      ),
+      profiles: z.array(
+        z.object({
+          _id: z.string(),
+          name: z.string(),
+          description: text,
+          downlinkInterfaces: z.array(z.string()),
+        }),
+      ),
+    })
+    .nullish(),
+});
+export type Hardware = z.infer<typeof hardwareSchema>;
 export const deviceAttributeInputSchema = z.object({
   attributeId: z.string().min(1),
   attributeName: z.string().min(1),
@@ -151,6 +211,7 @@ export type DeviceEnrollment = z.infer<typeof deviceEnrollmentSchema>;
 export interface Repository {
   listOrganisations(signal?: AbortSignal): Promise<Organisation[]>;
   listProjects(orgId: string, signal?: AbortSignal): Promise<Project[]>;
+  listUsers(orgId: string, signal?: AbortSignal): Promise<ProjectUser[]>;
   listDevices(
     orgId: string,
     projectId: string,
@@ -162,4 +223,24 @@ export interface Repository {
     signal?: AbortSignal,
   ): Promise<Device[]>;
   listModules(orgId: string, signal?: AbortSignal): Promise<Module[]>;
+  listAutomation(
+    orgId: string,
+    projectId: string,
+    signal?: AbortSignal,
+  ): Promise<{
+    alerts: AutomationAlert[];
+    runs: AutomationRun[];
+  }>;
+  toggleAutomation(
+    organisationId: string,
+    projectId: string,
+    alertId: string,
+  ): Promise<AutomationAlert>;
+  runAutomation(alertId: string): Promise<boolean>;
+  getHistoricalData(
+    orgId: string,
+    deviceId: string,
+    outputIds: string[],
+    signal?: AbortSignal,
+  ): Promise<HistoricalData>;
 }

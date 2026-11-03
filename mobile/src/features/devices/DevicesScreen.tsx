@@ -8,12 +8,15 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
-import { useQuery } from "@tanstack/react-query";
 import { type Device } from "../../lib/contracts";
-import { repository } from "../../lib/repository";
 import { useWorkspace } from "../../lib/workspace";
 import { theme } from "../../lib/theme";
-import { deviceStatus } from "../../lib/formatters";
+import {
+  deviceStatus,
+  formatTimestamp,
+  formatValue,
+} from "../../lib/formatters";
+import { DownlinkSheet } from "../downlink";
 import { useDebouncedValue, useDevices, useNow } from "../uplink/hooks";
 import {
   EmptyState,
@@ -24,13 +27,9 @@ import {
   Sheet,
   Skeleton,
 } from "../../shared";
-import {
-  DEVICE_ROW_HEIGHT,
-  filterDevices,
-  mergeDeviceDetails,
-  type StatusFilter,
-} from "./model";
+import { filterDevices, type StatusFilter } from "./model";
 const offsets = new Map<string, number>();
+const EXPANDED_ROW_HEIGHT = 188;
 export function DevicesScreen({
   onSelectDevice,
   onNotifications,
@@ -44,28 +43,19 @@ export function DevicesScreen({
 }) {
   const { orgId, projectId, projectName } = useWorkspace();
   const scope = `${orgId}/${projectId}`;
-  const query = useDevices();
+  // Cards are a live device surface, so always request the complete payload.
+  const query = useDevices(true);
   const now = useNow();
   const statusNow = useNow(30_000);
   const [search, setSearch] = useState("");
   const debounced = useDebouncedValue(search, 200);
   const [status, setStatus] = useState<StatusFilter>("All");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [commandDeviceId, setCommandDeviceId] = useState<string | null>(null);
   const listRef = useRef<FlatList<Device>>(null);
-  const details = useQuery({
-    queryKey: ["details", orgId, projectId],
-    queryFn: ({ signal }) =>
-      repository.listDeviceDetails(orgId, projectId, signal),
-    enabled: !!orgId && !!projectId,
-    staleTime: 60_000,
-  });
-  const merged = useMemo(
-    () => mergeDeviceDetails(query.data ?? [], details.data ?? []),
-    [query.data, details.data],
-  );
   const filtered = useMemo(
-    () => filterDevices(merged, debounced, status, statusNow),
-    [merged, debounced, status, statusNow],
+    () => filterDevices(query.data ?? [], debounced, status, statusNow),
+    [query.data, debounced, status, statusNow],
   );
   const age = query.dataUpdatedAt
     ? Math.max(0, Math.floor((now - query.dataUpdatedAt) / 1000))
@@ -159,8 +149,8 @@ export function DevicesScreen({
           removeClippedSubviews
           keyboardShouldPersistTaps="handled"
           getItemLayout={(_, index) => ({
-            length: DEVICE_ROW_HEIGHT,
-            offset: DEVICE_ROW_HEIGHT * index,
+            length: EXPANDED_ROW_HEIGHT,
+            offset: EXPANDED_ROW_HEIGHT * index,
             index,
           })}
           onScroll={(e) => offsets.set(scope, e.nativeEvent.contentOffset.y)}
@@ -207,6 +197,7 @@ export function DevicesScreen({
               device={item}
               status={deviceStatus(item.timestamp, now)}
               onPress={() => onSelectDevice?.(item._id)}
+              onCommand={() => setCommandDeviceId(item._id)}
             />
           )}
         />
@@ -234,6 +225,17 @@ export function DevicesScreen({
           </Pressable>
         ))}
       </Sheet>
+      {commandDeviceId && (
+        <DownlinkSheet
+          visible
+          deviceId={commandDeviceId}
+          hardwareId={
+            query.data?.find((device) => device._id === commandDeviceId)
+              ?.hardwareId
+          }
+          onClose={() => setCommandDeviceId(null)}
+        />
+      )}
     </Screen>
   );
 }
@@ -241,11 +243,19 @@ const DeviceRow = memo(function DeviceRow({
   device,
   status,
   onPress,
+  onCommand,
 }: {
   device: Device;
   status: string;
   onPress: () => void;
+  onCommand: () => void;
 }) {
+  const compact = false;
+  const keyValue = device.outputs?.[0] ?? device.attributes?.[0];
+  const keyLabel = device.outputs?.[0]
+    ? device.outputs[0].outputName || device.outputs[0].outputId
+    : device.attributes?.[0]?.attributeName ||
+      device.attributes?.[0]?.attributeId;
   return (
     <Pressable
       accessibilityRole="button"
@@ -253,38 +263,106 @@ const DeviceRow = memo(function DeviceRow({
       onPress={onPress}
       style={s.card}
     >
-      <View style={s.image}>
-        {/busy/i.test(device.hardwareType ?? "") ? (
-          <Image
-            source={require("../../assets/80bd2.png")}
-            contentFit="contain"
-            style={s.deviceImage}
-            accessibilityLabel={device.name}
-          />
-        ) : (
-          <Icon name="devices" size={30} color={theme.accessibleGreen} />
-        )}
-      </View>
+      {!compact && (
+        <View style={s.image}>
+          {/busy/i.test(device.hardwareType ?? "") ? (
+            <Image
+              source={require("../../assets/80bd2.png")}
+              contentFit="contain"
+              style={s.deviceImage}
+              accessibilityLabel={device.name}
+            />
+          ) : (
+            <Icon name="devices" size={30} color={theme.accessibleGreen} />
+          )}
+        </View>
+      )}
       <View style={s.copy}>
         <Text numberOfLines={1} style={s.name}>
           {device.name}
         </Text>
         <Text numberOfLines={1} style={s.small}>
-          DevEUI: {device.devEui}
+          Last heard: {formatTimestamp(device.timestamp)}
         </Text>
-        <Text numberOfLines={1} style={s.place}>
-          {device.position?.placeName || "No location"}
-        </Text>
+        {keyValue && (
+          <Text numberOfLines={1} style={s.small}>
+            {keyLabel}: {formatValue(keyValue.value)}
+          </Text>
+        )}
+        {!compact && (
+          <>
+            <Text numberOfLines={1} style={s.place}>
+              {device.position?.placeName || "No location"}
+            </Text>
+            <Text numberOfLines={1} style={s.small}>
+              DevEUI: {device.devEui}
+            </Text>
+            {(device.outputs ?? []).slice(0, 2).map((output) => (
+              <View key={output.outputId} style={s.outputRow}>
+                <Icon
+                  name="chart"
+                  size={14}
+                  color={outputColour(output.color)}
+                />
+                <Text numberOfLines={1} style={s.outputText}>
+                  {output.outputName || output.outputId}
+                  {output.label ? ` · ${output.label}` : ""}:{" "}
+                  {formatValue(output.value)}
+                </Text>
+              </View>
+            ))}
+            {!device.outputs?.length && (
+              <Text numberOfLines={1} style={s.small}>
+                No outputs reported
+              </Text>
+            )}
+            <Text numberOfLines={1} style={s.small}>
+              {(device.attributes ?? [])
+                .map(
+                  (attribute) =>
+                    `${attribute.attributeName}: ${formatValue(attribute.value)}`,
+                )
+                .join(" · ") || "No attributes reported"}
+            </Text>
+          </>
+        )}
       </View>
       <View style={s.trailing}>
-        <Text style={[s.status, status === "Online" ? s.online : s.offline]}>
+        <Text
+          style={[
+            s.status,
+            status === "Online"
+              ? s.online
+              : status === "Unknown"
+                ? s.unknown
+                : s.offline,
+          ]}
+        >
           {status}
         </Text>
         <Icon name="next" size={18} />
+        {!compact && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Send command to ${device.name}`}
+            onPress={(event) => {
+              event.stopPropagation();
+              onCommand();
+            }}
+            style={s.command}
+          >
+            <Text style={s.commandText}>Command</Text>
+          </Pressable>
+        )}
       </View>
     </Pressable>
   );
 });
+function outputColour(colour: string | null | undefined) {
+  return colour && /^#[0-9a-f]{3,8}$/i.test(colour)
+    ? colour
+    : theme.accessibleGreen;
+}
 const s = StyleSheet.create({
   top: { paddingTop: 16, paddingHorizontal: 12, gap: 6 },
   search: {
@@ -324,7 +402,7 @@ const s = StyleSheet.create({
   },
   list: { paddingHorizontal: 12, paddingTop: 8, paddingBottom: 20 },
   card: {
-    height: 106,
+    height: 188,
     marginBottom: 12,
     padding: 12,
     backgroundColor: theme.surface,
@@ -333,6 +411,12 @@ const s = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     elevation: 1,
+  },
+  command: { minHeight: 44, justifyContent: "center", paddingHorizontal: 5 },
+  commandText: {
+    color: theme.accessibleGreen,
+    fontFamily: theme.bold,
+    fontSize: 12,
   },
   image: {
     height: 58,
@@ -344,6 +428,13 @@ const s = StyleSheet.create({
   },
   deviceImage: { height: 58, width: 58 },
   copy: { flex: 1, gap: 6 },
+  outputRow: { flexDirection: "row", alignItems: "center", gap: 4 },
+  outputText: {
+    flex: 1,
+    fontFamily: theme.font,
+    fontSize: 11,
+    color: theme.secondary,
+  },
   name: { fontFamily: theme.bold, fontSize: 16, color: theme.text },
   small: { fontFamily: theme.font, fontSize: 11, color: theme.secondary },
   place: { fontFamily: theme.font, fontSize: 12, color: theme.text },
@@ -355,6 +446,7 @@ const s = StyleSheet.create({
   status: { fontSize: 10, fontFamily: theme.font, padding: 4, borderRadius: 8 },
   online: { color: theme.accessibleGreen, backgroundColor: "#EDF6DD" },
   offline: { color: theme.secondary, backgroundColor: theme.canvas },
+  unknown: { color: "#8B5E00", backgroundColor: "#FFF3D7" },
   filter: {
     minHeight: 48,
     flexDirection: "row",

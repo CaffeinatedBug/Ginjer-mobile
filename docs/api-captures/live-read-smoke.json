@@ -68,7 +68,7 @@
     "operation": "Org List",
     "passed": true,
     "http": 200,
-    "activeAcceptedCount": 1
+    "activeAcceptedCount": 2
   },
   {
     "operation": "Project List",
@@ -81,6 +81,86 @@
     "passed": true,
     "http": 200,
     "projectCount": 1
+  },
+  {
+    "operation": "Organisation Users",
+    "passed": true,
+    "http": 200,
+    "userCount": 13
+  },
+  {
+    "operation": "Module List",
+    "passed": true,
+    "http": 200,
+    "downlinkInterfaceCount": 106
+  },
+  {
+    "operation": "Hardware List",
+    "passed": true,
+    "http": 200,
+    "count": 156
+  },
+  {
+    "operation": "Network List",
+    "passed": true,
+    "http": 200,
+    "count": 7
+  },
+  {
+    "operation": "Cluster List",
+    "passed": false,
+    "codes": [
+      "INTERNAL_SERVER_ERROR"
+    ]
+  },
+  {
+    "operation": "Device List",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 7,
+    "fieldTypes": {
+      "_id": "str",
+      "name": "str",
+      "devEui": "str",
+      "hardwareId": "str",
+      "timestamp": "str",
+      "deleted": "bool"
+    }
+  },
+  {
+    "operation": "Device Details",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 7,
+    "fieldTypes": {
+      "_id": "str",
+      "name": "str",
+      "description": "NoneType",
+      "devEui": "str",
+      "organisationId": "str",
+      "projectId": "str",
+      "clusterId": "str",
+      "hardwareId": "str",
+      "networkId": "str",
+      "hardwareType": "str",
+      "timestamp": "str",
+      "deleted": "bool",
+      "position": "dict",
+      "outputs": "list",
+      "attributes": "list"
+    }
+  },
+  {
+    "operation": "Project List",
+    "passed": true,
+    "http": 200,
+    "projectCount": 3
+  },
+  {
+    "operation": "Organisation Users",
+    "passed": true,
+    "http": 200,
+    "userCount": 1
   },
   {
     "operation": "Module List",
@@ -99,6 +179,48 @@
     "passed": true,
     "http": 200,
     "count": 7
+  },
+  {
+    "operation": "Cluster List",
+    "passed": false,
+    "codes": [
+      "INTERNAL_SERVER_ERROR"
+    ]
+  },
+  {
+    "operation": "Device List",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 0,
+    "fieldTypes": {}
+  },
+  {
+    "operation": "Device Details",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 0,
+    "fieldTypes": {}
+  },
+  {
+    "operation": "Cluster List",
+    "passed": false,
+    "codes": [
+      "INTERNAL_SERVER_ERROR"
+    ]
+  },
+  {
+    "operation": "Device List",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 0,
+    "fieldTypes": {}
+  },
+  {
+    "operation": "Device Details",
+    "passed": true,
+    "http": 200,
+    "deviceCount": 0,
+    "fieldTypes": {}
   },
   {
     "operation": "Cluster List",

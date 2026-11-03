@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { request } from "../src/lib/graphql";
 import { ApiError } from "../src/lib/errors";
+import { DOWNLINK_API_URL } from "../src/lib/config";
+import { operations } from "../src/lib/operations";
 import {
   hasUnresolvedDownlink,
   reconcileDownlink,
@@ -38,8 +40,43 @@ describe("downlink contract and reconciliation", () => {
     ).toBe(false);
   });
 
-  test("server validation after dispatch remains uncertain until explicit reconciliation", async () => {
+  test("dispatches a scalar controller value through the production downlink endpoint", async () => {
+    mockedRequest.mockResolvedValueOnce({
+      sendDownlink: { timestamp: null, type: "Downlink", message: "accepted" },
+    });
+    await sendDownlink(action);
+    expect(mockedRequest).toHaveBeenCalledWith(
+      operations.SendDownlink,
+      { action: { ...action, value: "ON" } },
+      expect.anything(),
+      { mutation: true, url: DOWNLINK_API_URL },
+    );
+  });
+
+  test("server validation does not create an uncertain lock", async () => {
     mockedRequest.mockRejectedValueOnce(new ApiError("Rejected", "validation"));
+    await expect(sendDownlink(action)).rejects.toMatchObject({
+      kind: "validation",
+    });
+    expect(
+      await hasUnresolvedDownlink(action.organisationId, action.deviceId),
+    ).toBe(false);
+  });
+
+  test("a structured server rejection does not create an uncertain lock", async () => {
+    mockedRequest.mockRejectedValueOnce(
+      new ApiError("Server rejected", "server"),
+    );
+    await expect(sendDownlink(action)).rejects.toMatchObject({
+      kind: "server",
+    });
+    expect(
+      await hasUnresolvedDownlink(action.organisationId, action.deviceId),
+    ).toBe(false);
+  });
+
+  test("ambiguous delivery stays locked until explicit reconciliation", async () => {
+    mockedRequest.mockRejectedValueOnce(new ApiError("Timed out", "network"));
     await expect(sendDownlink(action)).rejects.toMatchObject({
       kind: "uncertain",
     });

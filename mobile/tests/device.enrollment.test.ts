@@ -1,8 +1,12 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { deviceEnrollmentSchema, deviceSchema } from "../src/lib/contracts";
+import {
+  deviceEnrollmentSchema,
+  deviceSchema,
+  hardwareSchema,
+} from "../src/lib/contracts";
 import { request } from "../src/lib/graphql";
 import { operations } from "../src/lib/operations";
-import { saveDevice } from "../src/features/devices/api";
+import { hardwareControllerIds, saveDevice } from "../src/features/devices/api";
 
 jest.mock("../src/lib/graphql", () => ({ request: jest.fn() }));
 
@@ -59,5 +63,28 @@ describe("device enrollment contract", () => {
       expect.anything(),
       { mutation: true },
     );
+  });
+
+  test("uses hardware controllers and profile interfaces as valid downlink IDs", () => {
+    const hardware = hardwareSchema.parse({
+      _id: "hardware-1",
+      name: "Relay Controller",
+      loRaWANConfiguration: {
+        controllers: [{ moduleId: "relay-1", code: null }],
+        profiles: [
+          {
+            _id: "profile-1",
+            name: "Default",
+            description: null,
+            downlinkInterfaces: ["profile-interface-1"],
+          },
+        ],
+      },
+    });
+
+    expect(hardwareControllerIds(hardware)).toEqual([
+      "relay-1",
+      "profile-interface-1",
+    ]);
   });
 });

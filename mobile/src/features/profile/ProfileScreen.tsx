@@ -27,6 +27,8 @@ export function ProfileScreen({
     queryKey: ["organisations"],
     queryFn: ({ signal }) => repository.listOrganisations(signal),
     enabled: !!user,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
   const displayedOrgName =
     orgName ||
